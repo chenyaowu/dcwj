@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd
+        http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+        <!-- 引入外部属性文件 -->
+        <context:property-placeholder location="classpath:jdbc.properties"/>
+        <!-- 配置连接池 -->
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        	<property name="driverClass" value="${jdbc.driverClass}"/>
+        	<property name="jdbcUrl" value="${jdbc.url}"/>
+        	<property name="user" value="${jdbc.username}"/>
+        	<property name="password" value="${jdbc.password}"/>
+        </bean>
+        <!-- 配置Hibernate相关属性 -->
+        <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        	<!-- 注入连接池 -->
+        	<property name="dataSource" ref="dataSource"/>
+        	<!-- 配置Hibernate的属性 -->
+        	<property name="hibernateProperties">
+        		<props>
+        			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        			<prop key="hibernate.show_sql">true</prop>
+        			<prop key="hibernate.format_sql">true</prop>
+        			<prop key="hibernate.hbm2ddl.auto">update</prop>
+        		</props>
+        	</property>
+        	<!-- 加载Hibernate中的映射文件 -->
+        	<property name="mappingResources">
+        		<list>
+        			<value>cc/mixin/domain/Grade.hbm.xml</value>
+        			<value>cc/mixin/domain/Student.hbm.xml</value>
+        			<value>cc/mixin/domain/Duty.hbm.xml</value>
+        			<value>cc/mixin/domain/Teacher.hbm.xml</value>
+        			<value>cc/mixin/domain/Score.hbm.xml</value>
+        			<value>cc/mixin/domain/Scheval.hbm.xml</value>
+        			<value>cc/mixin/domain/User.hbm.xml</value>
+        		</list>
+        	</property>
+        	
+        </bean>
+        <!-- 配置Action的类 -->
+       
+       <bean id="studentAction" class="cc.mixin.action.StudentAction" scope="prototype">
+       		<property name="studentService" ref="studentService"></property> 
+       </bean>
+       <bean name="dutyAction" class="cc.mixin.action.DutyAction" scope="prototype">
+       		<property name="dutyService" ref="dutyService"></property> 
+       </bean>
+       <bean name="questionAction" class="cc.mixin.action.QuestionAction" scope="prototype"> </bean>
+       
+		<bean name="scoreTeaAction" class="cc.mixin.action.ScoreTeaAction" scope="prototype">
+      	 	   <property name="scoreService" ref="scoreService"></property>
+        </bean>
+        <bean name="scoreTeaMainAction" class="cc.mixin.action.ScoreMainTeaAction" scope="prototype">
+        		<property name="scoreService" ref="scoreService"></property>
+        </bean>
+        
+        <bean name="scoreSchoolAction" class="cc.mixin.action.ScoreSchoolAction" scope="prototype">
+        	<property name="scoreService" ref="scoreService"></property>
+        </bean>
+        <bean name="loginAction" class="cc.mixin.action.LoginAction" scope="prototype">
+        	<property name="loginServer" ref="loginService"></property>
+        </bean>
+        <bean name="userAction" class="cc.mixin.action.UserAction" scope="prototype">
+       		<property name="loginServer" ref="loginService"></property>
+        	<property name="userServer" ref="userServer"></property>
+        </bean>
+        <!-- 配置业务层的类 -->
+       
+       <bean id="studentService" class="cc.mixin.service.impl.StudentServiceImpl">
+       	  <property name="studentDao" ref="studentDao"></property>
+       </bean>
+       <bean id="dutyService" class="cc.mixin.service.impl.DutyServiceImpl">
+       	  <property name="dutyDao" ref="dutyDao"></property>
+       </bean>
+       <bean id="scoreService" class="cc.mixin.service.impl.ScoreServiceImpl">
+       	   <property name="scoreDao" ref="scoreDao"></property> 
+       	   <property name="transactionTemplate" ref="transactionTemplate"></property>
+       </bean>
+       <bean id="loginService" class="cc.mixin.service.impl.LoginServerImpl">
+       		<property name="loginDao" ref="loginDao"></property>
+       </bean>
+       <bean id="userServer" class="cc.mixin.service.impl.UserServerimpl">
+       		<property name="userDao" ref="userDao"></property>
+       </bean>
+       
+       
+        <!-- 配置DAO类 -->
+        
+        <bean id="studentDao" class="cc.mixin.dao.impl.StudentDaoImpl">
+        	<property name="sessionFactory" ref="sessionFactory"></property>
+        </bean>
+        <bean id="dutyDao" class="cc.mixin.dao.impl.DutyDaoImpl">
+        	<property name="sessionFactory" ref="sessionFactory"></property>
+        </bean>
+         <bean id="scoreDao" class="cc.mixin.dao.impl.ScoreDaoImpl">
+        	     <property name="sessionFactory" ref="sessionFactory"></property>  
+        </bean>
+         <bean id="loginDao" class="cc.mixin.dao.impl.LoginDaoImpl">
+        	     <property name="sessionFactory" ref="sessionFactory"></property>  
+        </bean>
+        <bean id="userDao" class="cc.mixin.dao.impl.UserDaoimpl">
+        	     <property name="sessionFactory" ref="sessionFactory"></property>  
+        </bean>
+       
+        <!--配置事务管理器  -->
+	      <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	      	<property name="sessionFactory" ref="sessionFactory"></property>
+	      </bean>
+	    <!-- 拦截器 -->
+	    <bean id="pageInterceptor" class="cc.mixin.interceptor.PageInterceptor"></bean>
+	   <!--开启注解事务  -->
+	   <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+	   		<property name="transactionManager" ref="transactionManager"></property>
+	   </bean>
+	   
+	   <tx:annotation-driven transaction-manager="transactionManager"/>
+        	 
+</beans>   

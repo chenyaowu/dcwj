@@ -1,0 +1,75 @@
+#account{
+	width: 100%;
+	height: 15px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	background-image: url('http://www.mixin.cc:80/weixinapp/images/user.png');
+	line-height: 15px;
+	padding: 23px 0 22px 45px;
+	border-style: solid;
+	border-bottom-color: #DAD6D6;
+	border-bottom-width: 0.1;
+	border-top-width: 0;
+	border-left-width: 0;
+	border-right-width: 0;
+}
+
+inout {
+	color: #cccccc;
+}
+
+#password {
+	width: 100%;
+	height: 15px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	background-image: url('http://www.mixin.cc:80/weixinapp/images/pwd.png');
+	line-height: 15px;
+	-ms-line-height: 45px;
+	padding: 23px 0 22px 45px;
+	border-style: solid;
+	border-width: 0;
+}
+
+.show {
+	display: block;
+}
+
+.hide {
+	display: none;
+}
+
+ul li{
+	list-style-type:none;
+}
+#login{
+	float:left;
+}
+#getcode{
+	float:right;
+	margin-right:25px;
+	margin-bottom:10px;
+}
+#c999{
+	height:25px;
+}
+
+li a,#quick{
+	font-size:17px;
+	font-family:"Î¢ÈíÑÅºÚ";
+	color:#5EDBFF;
+}
+#mess{
+	color:red;
+}
+a{
+	
+	cursor: pointer;
+}
+td{
+	margin: 100px;
+}

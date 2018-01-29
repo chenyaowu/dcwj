@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- /* * $Id: struts-plugin.xml 722219 2008-12-01 20:41:26Z musachy $ * * Licensed to the Apache Software Foundation (ASF) under one * or more contributor license agreements. See the NOTICE file * distributed with this work for additional information * regarding copyright ownership. The ASF licenses this file * to you under the Apache License, Version 2.0 (the * "License"); you may not use this file except in compliance * with the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by applicable law or agreed to in writing, * software distributed under the License is distributed on an * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY * KIND, either express or implied. See the License for the * specific language governing permissions and limitations * under the License. */ -->
+
+<!DOCTYPE struts   PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<package name="SSH"  extends="struts-default" namespace="/" strict-method-invocation="false">
+		<interceptors>
+			<interceptor name="pageInterceptor" class="pageInterceptor"/>
+			<interceptor-stack name="pageInterceptorStack">
+				<interceptor-ref name="pageInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		<default-action-ref name="index"/>
+		<!-- 错误Action -->
+		<action name="index">
+			<result>login.jsp</result>
+		</action>
+		<action name="student_*" method="{1}" class="studentAction">
+			<result name="login_success" type="chain">duty_findTeaByClassName</result>
+			<result name="input">login.jsp</result>
+		</action>	
+		<action name="duty_*" class="dutyAction" method="{1}">
+			<result name="findTeaByClassNameSuccess">select.jsp</result>
+			<result name="findStuByIdSuccess" type="chain" >duty_findTeaByClassName</result>
+		</action>	
+		<action name="question_*" class="questionAction" method="{1}">
+			<interceptor-ref name="pageInterceptorStack"/>
+			<result name="selectCommon">questionTea.jsp</result>
+			<result name="selectMain">mainQuestion.jsp</result>
+			<result name="selectSchool">schoolQuestion.jsp</result>
+			<result name="input">login.jsp</result>
+		</action>
+		<action name="scoreTea" class="scoreTeaAction" >
+			<result name="scoreTeaSuccess">success.jsp</result>
+		</action>
+		
+		<action name="scoreMainTea" class="scoreTeaMainAction">
+			<result >success.jsp</result>
+		</action>
+		
+		<action name="scoreSchool" class="scoreSchoolAction">
+			<result>success.jsp</result>
+		</action>
+		
+		<action name="login" class="loginAction">
+			<result name="STUDENT" type="chain">student_login</result>
+			<result name="TEACHER">success.jsp</result>
+			<result name="ADMIN" type="chain">user_login</result>
+			<result name="input">login.jsp</result>
+		</action>
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="userLoginSuccess">adminResult.jsp</result>
+			<result name="input">login.jsp</result>
+		</action>
+		
+	</package>
+</struts>

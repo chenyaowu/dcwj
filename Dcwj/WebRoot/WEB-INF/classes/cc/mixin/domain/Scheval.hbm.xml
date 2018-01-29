@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-9-6 16:33:57 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="cc.mixin.domain.Scheval" table="scheval">
+       <id name="id" column="id">
+       	<generator class="native"></generator>
+       </id>
+       <property name="stuId" column="stuId" ></property>
+       <property name="queId" column="queId" ></property>
+       <property name="evalute" column="evalute" ></property>
+      
+    </class>
+    
+    
+</hibernate-mapping>
